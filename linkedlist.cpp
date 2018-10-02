@@ -7,42 +7,78 @@ using namespace std;
 
 list::list() : head(NULL)
 {
+	head = NULL;
+	curr = NULL;
+	temp = NULL;
 }
 
 
 list::~list()
 {
-	node * curr = head;
-	while(head)
-	{
-		curr = head->next;
-		delete head;
-		head = curr;
-	}
+
 }
 
 
 void list::add (char ch)
 {
-	//Set previous and current nodes to traverse
-	node * prev = NULL;
-	node * curr = head;
+	node_ptr newNode = new node; //node_ptr points to new node
+	newNode->next = NULL; //find node newNode points to. Access its next element. Set it equal to NULL
+	newNode->data = ch; //Node holds data passed in
+	
+	if(head != NULL) { //if list exists
+		curr = head;
+		while(curr->next != NULL && curr->data < ch) { //while not at last node in list
+			curr = curr->next;
+		}//while
+		curr->next - newNode;
+	}//if
 
-	//Traverse the list
-	while(curr != NULL && curr->item < ch)
-	{
-		prev = curr;
+	else head = newNode;
+}//add
+
+bool list::del (char ch) {
+	node_ptr del_ptr = NULL;
+	temp = head;
+	curr = head;
+
+	while(curr != NULL && curr->data != ch) {
+		temp = curr; //keep temp one step behind (prev)
 		curr = curr->next;
-	}
+	}//while
 
-	//Add data to list
-	node * newNode = new node;//create new node to contain ch
-	newNode->item = ch;//add it to the item
-	newNode->next = NULL;
-	newNode->next = curr;//don't enter while loop again
-	if(prev == NULL)
-		head = newNode;
-	else
-		prev->next = newNode;
+	if(curr != NULL) {
+		del_ptr = curr;
+		curr = curr->next; //get curr pointer out of here
 
-}
+		//Need to connect temp and curr 
+		temp->next = curr; //list is patched
+		delete del_ptr;
+		return true;
+	}//if
+	else {
+		delete del_ptr;
+		return false;
+	}//else
+}//del
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
